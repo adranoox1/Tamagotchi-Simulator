@@ -78,7 +78,7 @@ class Game:
             self.choose_pets()
 
         # US11: the game loop, repeats until the player quits
-        actions_menu = ["feed", "play", "sleep", "heal"]
+        actions_menu = ["feed", "play", "sleep", "heal", "status"]
         while True:
             print()
             self.describe_pets()
@@ -119,9 +119,14 @@ class Game:
             pet = self.pets[chosen_pet]
 
             # Choose an action
-            action = input("What do you want to do? (feed/play/sleep/heal): ").strip().lower()
+            action = input("What do you want to do? (feed/play/sleep/heal/status): ").strip().lower()
             if action not in actions_menu:
-                print("Invalid action. Please choose from feed, play, sleep, or heal.")   # US18
+                print("Invalid action. Please choose from feed, play, sleep, heal, or status.")   # US18
+                continue
+
+            # Display only the selected pet's status (does not count as a turn)
+            if action == "status":
+                print(pet.get_status())
                 continue
 
             # Apply the action to the pet
