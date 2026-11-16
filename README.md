@@ -1,53 +1,87 @@
-# Tamagotchi-Simulator
-User stories
+# Tamagotchi Simulator
 
-Written as “As a player, I want… so that…”, grouped by feature. They describe what, not how, so they stay valid whatever you decide above.
+A command-line virtual pet game written in Python, made for the EPITA *Introduction to Python Programming* course (2026-2027).
 
-Epic 1 – The pets
+The player picks **3 pets** out of 15 and keeps them alive by feeding them, playing with them, putting them to sleep and healing them. Every action takes time, so neglected pets get hungry, bored and tired, lose health, and can die.
 
-US1. As a player, I want three pets to exist when the game starts, so that I have something to take care of.
-US2. As a player, I want to see a pet’s name and its four stats, so that I know what it needs.
+## How to run
 
-Epic 2 – Care actions
+You need **Python 3** (no extra library to install).
 
-US3. As a player, I want to feed my pet, so that its hunger goes down.
-US4. As a player, I want to play with my pet, so that its boredom goes down (knowing it gets hungrier and more tired).
-US5. As a player, I want to put my pet to sleep, so that its exhaustion goes down.
-US6. As a player, I want to heal my pet, so that its health goes up.
-US7. As a player, I want stats to stay within limits, so that values never become absurd (negative, or above the max).
+```bash
+python main.py
+```
 
-Epic 3 – Time, life and death
+All four `.py` files must be in the same folder. The save file `save.json` is created automatically the first time you save.
 
-US8. As a player, I want pets’ stats to evolve after each action, so that neglect has consequences.
-US9. As a player, I want a pet to die when its health reaches zero, so that the game has stakes.
-US10. As a player, I want random events to sometimes happen, so that the game is less predictable.
+## How to play
 
-Epic 4 – Menu
+1. At the start, choose to **load a saved game** or start a new one.
+2. For a new game, choose **3 different pets** from the list, separated by spaces (for example `Rima Bubbles Plume`).
+3. Each turn, every pet's status is shown. Then type:
 
-US11. As a player, I want a menu that reappears after each action, so that I can keep playing.
-US12. As a player, I want to select which pet I’m taking care of, so that my actions apply to the right one.
-US13. As a player, I want to quit the game from the menu.
+| Command | What it does | Counts as a turn? |
+| --- | --- | --- |
+| a pet's name (e.g. `Rima`) | select that pet, then choose `feed`, `play`, `sleep` or `heal` | Yes |
+| `stats` | number of living and dead pets, and average stats of living pets | No |
+| `save` | save the game to `save.json` | No |
+| `load` | load the game from `save.json` | No |
+| `quit` | leave the game | No |
 
-Epic 5 – Statistics
+The game ends when you quit or when all your pets are dead.
 
-US14. As a player, I want to see how many pets are alive and dead.
-US15. As a player, I want to see the average health of living pets and the average hunger, boredom and exhaustion.
+## The pets
 
-Epic 6 – Save and load
+There are 15 pets in 3 categories. Each category has a weakness: one need that grows faster than the others.
 
-US16. As a player, I want to save the game (all pets, their stats, alive/dead), so that I can stop and come back later.
-US17. As a player, I want to load a saved game, so that I continue exactly where I left off.
+| Category | Pets | Weakness |
+| --- | --- | --- |
+| **Land** | Rima (Bunny), Pistashe (Froggie), Noisette (Hedgehog), Biscuit (Puppy), Mochi (Hamster) | gets **bored** faster |
+| **Sea** | Bubbles (Sealion), Coral (Turtle), Splash (Dolphin), Inky (Octopus), Nemo (Clownfish) | gets **hungry** faster |
+| **Sky** | Plume (Owl), Kiwi (Parrot), Nuage (Bat), Pepper (Sparrow), Flamme (Phoenix) | gets **tired** faster |
 
-Epic 7 – Robustness
+## Game rules
 
-US18. As a player, if I type something invalid in the menu, I want an error message instead of a crash.
-US19. As a player, if I select a pet that doesn’t exist, I want to be told and asked again.
-US20. As a player, if I try to act on a dead pet, I want to be told it’s dead.
-US21. As a player, if the save file is missing or broken, I want a clear message and the game to keep running.
+Every pet has 4 stats, from 0 to 100: **health** (100 is best), and **hunger**, **boredom** and **exhaustion** (0 is best).
 
-Suggested order
-Sprint 1: US1, US2, US3–US7 (the class, tested without a menu)
-Sprint 2: US11, US12, US13 (playable game)
-Sprint 3: US8, US9, US10 (the game becomes a game)
-Sprint 4: US14, US15, US16, US17
-Sprint 5: US18–US21, then final testing
+| Action | Effect |
+| --- | --- |
+| Feed | hunger −10, health +5 (only if hungry) |
+| Play | boredom −10, hunger +10, exhaustion +10 (only if bored) |
+| Sleep | exhaustion −10 (only if tired) |
+| Heal | health +20 (only if not at full health) |
+
+- **Time:** after each action, every living pet gets +4 hunger, boredom and exhaustion (+6 for its category's weakness).
+- **Neglect:** for each need that reaches 100, the pet loses 10 health per turn.
+- **Death:** a pet dies when its health reaches 0. It can no longer be cared for.
+- **Random events:** after each turn, there is a 20% chance that a random living pet finds a snack, catches a cold, finds a toy or has a nightmare.
+
+The full rules are in [`rules.txt`](rules.txt).
+
+## Project structure
+
+```
+Tamagotchi-Simulator/
+|-- main.py          # entry point: creates the game and starts it
+|-- tamagotchi.py    # Tamagotchi class and its Land / Sea / Sky subclasses
+|-- game.py          # Game class: pet choice, menu loop, time passing, statistics
+|-- storage.py       # saving and loading the game in JSON
+|-- rules.txt        # the game rules
+```
+
+## Python concepts used
+
+- **Object-oriented programming:** a `Tamagotchi` class with three subclasses (**inheritance**). Each subclass overrides `get_status()` and changes class attributes to set its own weakness.
+- **Data structures:** dictionaries for the pets, lists, tuples, and list and dictionary comprehensions.
+- **Modules:** the code is split into 4 files, and uses the `random` and `json` standard libraries.
+- **File handling:** the game is saved and loaded as JSON (**serialization** with `to_dict()`, **deserialization** in `load_game()`).
+- **Exception handling:** invalid inputs never crash the game. A missing save file (`FileNotFoundError`), a broken one (`json.JSONDecodeError`) or invalid content (`ValueError`) each show a clear message.
+
+## Error handling
+
+| Situation | What happens |
+| --- | --- |
+| Invalid or duplicate pet names at the start | a message, then the question is asked again |
+| Unknown pet or unknown command in the menu | a message, and the menu is shown again |
+| Action on a dead pet | "*name* is dead." |
+| Missing, broken or invalid save file | a clear message, and the game continues |
