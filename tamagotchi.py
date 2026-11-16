@@ -36,7 +36,9 @@ class Tamagotchi:
         }
 
     def get_status(self):
-        return f"{self.name} is a {self.species} that has {self.health} health, {self.hunger} hunger, {self.boredom} boredom, and {self.exhaustion} exhaustion."
+        # "an" before a vowel (an Owl), "a" otherwise (a Bunny)
+        article = "an" if self.species[0].lower() in "aeiou" else "a"
+        return f"{self.name} is {article} {self.species} that has {self.health} health, {self.hunger} hunger, {self.boredom} boredom, and {self.exhaustion} exhaustion."
 
     # US9: a pet is alive while it has health left
     def is_alive(self):
