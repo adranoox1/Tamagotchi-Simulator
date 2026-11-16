@@ -1,0 +1,56 @@
+
++the capacity of HEALTH / HUNGER / BOREDOM / EXHAUSTION :
+
+HEALTH : 0-100
+HUNGER : 0-100
+BOREDOM : 0-100
+EXHAUSTION : 0-100
+
++Time left alone :
+
+every action counts as 1 turn, and every turn the pets increase in boredom, hunger and exhaustion
+sky : B = +4 / H = +4 / E = +6
+land : B = +6 / H = +4 / E = +4
+sea : B = +4 / H = +6 / E = +4
+health decreases every turn by 10 for each stat (boredom, hunger or exhaustion) that hits 100.
+(choosing stats, save, load or quit does not count as a turn, and dead pets no longer change)
+
+
++the general (land, sky, sea) rules :
+
+when player feeds pet, hunger lowers by 10, health increases by 5.
+(only if the pet is hungry)
+when player puts pet to sleep, exhaustion lowers by 10.
+(only if the pet is tired)
+when player plays with pet, boredom lowers by 10, exhaustion increases by 10, hunger increases by 10.
+(only if the pet is bored)
+when player heals pet, health increases by 20.
+(only if the pet is not at full health)
+a pet dies when its health reaches 0, and can no longer eat, play, sleep or be healed.
+
+
++the specific rules :
+
+sky:
+
+pets exhaustion increases more than land and sea by 2
+(you have to put them to sleep more than you put to sleep the others)
+
+land:
+
+pets boredom increases more than sea and sky by 2
+(you have to play with them more than you play with the others)
+
+sea:
+
+pets hunger increases more than land and sky by 2
+(you have to feed them more than you usually feed the others)
+
+
++random events :
+
+after each turn, there is a 20% chance that one random living pet gets an event:
+found a snack : hunger lowers by 10
+caught a cold : health lowers by 15
+found a new toy : boredom lowers by 10
+had a nightmare : exhaustion increases by 10
